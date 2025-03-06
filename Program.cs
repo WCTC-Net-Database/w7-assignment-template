@@ -11,7 +11,7 @@ internal class Program
 {
     private static void ConfigureServices(IServiceCollection services)
     {
-        // Register for DI
+        // Register services for DI
         services.AddTransient<GameEngine>();
         services.AddTransient<MenuManager>();
         services.AddTransient<MapManager>();
@@ -23,19 +23,8 @@ internal class Program
 
         // Register IContext
         services.AddSingleton<IContext, DataContext>();
-
-        // Register GameEngine with dependency injection for characters and RoomFactory
-        services.AddTransient<GameEngine>(provider =>
-        {
-            var roomFactory = provider.GetService<IRoomFactory>();
-            var menuManager = provider.GetService<MenuManager>();
-            var mapManager = provider.GetService<MapManager>();
-            var outputManager = provider.GetService<OutputManager>();
-            var context = provider.GetService<IContext>();
-
-            return new GameEngine(context, roomFactory, menuManager, mapManager, outputManager);
-        });
     }
+
 
     private static void Main(string[] args)
     {
